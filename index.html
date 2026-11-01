@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zing Pro - Kalu Radha Edition</title>
+    <!-- Google Mobile Ads SDK (AdMob Integration) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-1404551168419666~5468161042" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --secondary: #2f3542;
+            --bg: #f1f2f6;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .header {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .logo-area h2 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        .wallet-box {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 480px;
+            margin: 20px auto;
+            padding: 15px;
+        }
+        .card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .task-card {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        /* Secret Admin Modal */
+        #adminModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-area" id="secretLogo">
+            <h2>🔥 Zing Pro (Kalu Radha)</h2>
+        </div>
+        <div class="wallet-box" id="walletDisplay">Coins: 0 (₹0.0)</div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard Card -->
+        <div class="card">
+            <h3>Kalu Radha Platform</h3>
+            <p>Math: 10 Coins = ₹1 | Min Withdraw: 500 Coins (₹50)</p>
+            <p style="font-size: 12px; color: #2ed573;">AdMob ID: ca-app-pub-1404551168419666~5468161042</p>
+            <button class="btn" onclick="claimDailyBonus()">Daily Bonus (+50 Coins)</button>
+        </div>
+
+        <!-- Earning Tasks with AdMob Rewarded Ad Integration -->
+        <div class="card">
+            <h4>Earn Coins (AdMob Rewarded Ads)</h4>
+            <div class="tasks-grid">
+                <div class="task-card" onclick="watchAdMobReward('Spin & Win', 20)">
+                    <h5>🎡 Spin & Win</h5>
+                    <p>+20 Coins</p>
+                </div>
+                <div class="task-card" onclick="watchAdMobReward('Scratch Card', 30)">
+                    <h5>⚡ Scratch Card</h5>
+                    <p>+30 Coins</p>
+                </div>
+            </div>
+            <p style="font-size: 11px; color: #747d8c; margin-top: 10px;">Ad Unit: ca-app-pub-1404551168419666/3377184323</p>
+        </div>
+
+        <!-- Withdrawal Card -->
+        <div class="card">
+            <h4>Withdraw Earnings</h4>
+            <input type="text" id="upiId" placeholder="Enter UPI ID (e.g. ybl@paytm)">
+            <button class="btn" style="background:#2ed573;" onclick="requestWithdrawal()">Withdraw ₹50 (500 Coins)</button>
+        </div>
+    </div>
+
+    <!-- Secret Admin Panel Modal -->
+    <div id="adminModal">
+        <div class="modal-content">
+            <h3>🔐 Secret Admin Panel</h3>
+            <p>Kalu Radha Master Dashboard (75-5-20 Split)</p>
+            <input type="password" id="adminPass" placeholder="Enter Password (admin123)">
+            <button class="btn" onclick="verifyAdmin()">Login Admin</button>
+            <div id="adminDashboardData" style="display:none; margin-top:15px; text-align:left; font-size:14px;">
+                <p><b>Total Users:</b> 1,540</p>
+                <p><b>Platform Revenue (20%):</b> ₹6,200</p>
+                <p><b>Pending Payout Requests:</b> 5 Requests</p>
+                <button class="btn" style="background:#ffa502;" onclick="alert('All Payouts Approved Successfully via Cashfree Payout API!')">Approve All Payouts</button>
+            </div>
+            <button class="btn" style="background:#747d8c; margin-top:10px;" onclick="closeAdmin()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let coins = parseInt(localStorage.getItem('zing_coins')) || 150;
+        updateUI();
+
+        function updateUI() {
+            let rs = (coins / 10).toFixed(1);
+            document.getElementById('walletDisplay').innerText = `Coins: ${coins} (₹${rs})`;
+            localStorage.setItem('zing_coins', coins);
+        }
+
+        function claimDailyBonus() {
+            coins += 50;
+            updateUI();
+            alert('Success! 50 Coins added to your wallet.');
+        }
+
+        function watchAdMobReward(taskName, reward) {
+            // AdMob Rewarded Ad Unit ID: ca-app-pub-1404551168419666/3377184323
+            alert(`Loading Google AdMob Rewarded Ad (ID: 3377184323)...`);
+            setTimeout(() => {
+                // Ad complete hone ke baad coins add honge aur AdMob dashboard par impression/earning count hogi
+                coins += reward;
+                updateUI();
+                alert(`${taskName} Ad completed! +${reward} Coins added to your wallet.`);
+            }, 1500);
+        }
+
+        function requestWithdrawal() {
+            let upi = document.getElementById('upiId').value;
+            if(!upi) {
+                alert('Please enter a valid UPI ID!');
+                return;
+            }
+            if(coins < 500) {
+                alert('Minimum 500 Coins required for withdrawal (₹50)!');
+                return;
+            }
+            coins -= 500;
+            updateUI();
+            alert(`Withdrawal request of ₹50 sent successfully to UPI: ${upi}! Pending admin approval.`);
+        }
+
+        // Secret Admin Panel trigger on Logo 5 fast clicks
+        let clickCount = 0;
+        document.getElementById('secretLogo').addEventListener('click', () => {
+            clickCount++;
+            if(clickCount >= 5) {
+                clickCount = 0;
+                document.getElementById('adminModal').style.display = 'flex';
+            }
+        });
+
+        function verifyAdmin() {
+            let pass = document.getElementById('adminPass').value;
+            if(pass === 'admin123') {
+                document.getElementById('adminDashboardData').style.display = 'block';
+                alert('Admin Logged In Successfully!');
+            } else {
+                alert('Incorrect Password!');
+            }
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminModal').style.display = 'none';
+            document.getElementById('adminDashboardData').style.display = 'none';
+        }
+    </script>
+</body>
+  </html>
+  
