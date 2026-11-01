@@ -12,6 +12,7 @@
             --secondary: #2f3542;
             --bg: #f1f2f6;
             --white: #ffffff;
+            --success: #2ed573;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -37,18 +38,19 @@
         }
         .logo-area h2 {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             color: var(--primary);
         }
         .wallet-box {
             background: rgba(255,255,255,0.1);
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 20px;
             font-weight: bold;
+            font-size: 14px;
         }
         .container {
             max-width: 480px;
-            margin: 20px auto;
+            margin: 15px auto;
             padding: 15px;
         }
         .card {
@@ -88,8 +90,26 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        /* Secret Admin Modal */
-        #adminModal {
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        /* Modals */
+        .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -104,19 +124,14 @@
             border-radius: 12px;
             width: 90%;
             max-width: 400px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
+            max-height: 90vh;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
 
+    <!-- Header -->
     <div class="header">
         <div class="logo-area" id="secretLogo">
             <h2>🔥 Zing Pro (Kalu Radha)</h2>
@@ -124,81 +139,238 @@
         <div class="wallet-box" id="walletDisplay">Coins: 0 (₹0.0)</div>
     </div>
 
-    <div class="container">
-        <!-- Dashboard Card -->
+    <!-- Main Container -->
+    <div class="container" id="mainAppContent" style="display:none;">
+        
+        <!-- User Profile & Status Card -->
         <div class="card">
-            <h3>Kalu Radha Platform</h3>
-            <p>Math: 10 Coins = ₹1 | Min Withdraw: 500 Coins (₹50)</p>
-            <p style="font-size: 12px; color: #2ed573;">AdMob ID: ca-app-pub-1404551168419666~5468161042</p>
-            <button class="btn" onclick="claimDailyBonus()">Daily Bonus (+50 Coins)</button>
+            <h3 id="welcomeUser">Welcome, User!</h3>
+            <p style="font-size: 12px; color: #2ed573;">Math: 10 Coins = ₹1 | Min Withdraw: 500 Coins (₹50)</p>
+            <button class="btn" onclick="claimDailyBonus()">Daily Check-in Bonus (+50 Coins)</button>
         </div>
 
-        <!-- Earning Tasks with AdMob Rewarded Ad Integration -->
+        <!-- Referral & Network Tracking Dashboard -->
+        <div class="card" style="text-align: left;">
+            <h4 style="text-align: center; margin-top:0;">👥 Referral & Network Hub</h4>
+            <p style="font-size: 13px; color: #666;">Apna link doston ko share karein aur har join par coins kamayein!</p>
+            <input type="text" id="myRefLink" readonly style="background: #eee; font-size: 12px;">
+            <button class="btn" style="background: #25D366; margin-top: 5px;" onclick="shareOnWhatsApp()">Share on WhatsApp</button>
+            
+            <div class="stats-row">
+                <span>Total Referrals Joined:</span>
+                <strong id="refCount">0 Users</strong>
+            </div>
+            <div class="stats-row">
+                <span>Referral Earnings:</span>
+                <strong id="refEarnings">0 Coins (₹0.0)</strong>
+            </div>
+        </div>
+
+        <!-- Earning Tasks (AdMob Rewarded Ads) -->
         <div class="card">
             <h4>Earn Coins (AdMob Rewarded Ads)</h4>
             <div class="tasks-grid">
                 <div class="task-card" onclick="watchAdMobReward('Spin & Win', 20)">
                     <h5>🎡 Spin & Win</h5>
-                    <p>+20 Coins</p>
+                    <p style="color:var(--primary); font-weight:bold;">+20 Coins</p>
                 </div>
                 <div class="task-card" onclick="watchAdMobReward('Scratch Card', 30)">
                     <h5>⚡ Scratch Card</h5>
-                    <p>+30 Coins</p>
+                    <p style="color:var(--primary); font-weight:bold;">+30 Coins</p>
                 </div>
             </div>
-            <p style="font-size: 11px; color: #747d8c; margin-top: 10px;">Ad Unit: ca-app-pub-1404551168419666/3377184323</p>
+            <p style="font-size: 11px; color: #747d8c; margin-top: 10px;">AdMob Rewarded ID Active</p>
         </div>
 
         <!-- Withdrawal Card -->
-        <div class="card">
-            <h4>Withdraw Earnings</h4>
-            <input type="text" id="upiId" placeholder="Enter UPI ID (e.g. ybl@paytm)">
-            <button class="btn" style="background:#2ed573;" onclick="requestWithdrawal()">Withdraw ₹50 (500 Coins)</button>
+        <div class="card" style="text-align: left;">
+            <h4 style="text-align: center; margin-top:0;">💸 Withdraw Earnings</h4>
+            <label style="font-size:12px;">Enter UPI ID (e.g. ybl@paytm)</label>
+            <input type="text" id="upiId" placeholder="yourname@upi">
+            <button class="btn" style="background:var(--success);" onclick="requestWithdrawal()">Withdraw ₹50 (500 Coins)</button>
+        </div>
+
+        <button class="btn" style="background:#747d8c; font-size: 13px; padding: 8px;" onclick="logoutUser()">Logout Account</button>
+    </div>
+
+    <!-- Authentication Modal (Login / Signup) -->
+    <div id="authModal" class="modal" style="display:flex;">
+        <div class="modal-content">
+            <h2 style="text-align:center; color:var(--primary);">Zing Pro Login</h2>
+            <p style="text-align:center; font-size:13px; color:#666;">Kalu Radha Secure Platform</p>
+            
+            <div id="signupFields">
+                <input type="text" id="regName" placeholder="Full Name">
+            </div>
+            <input type="text" id="regMobile" placeholder="Mobile Number">
+            <input type="password" id="regPass" placeholder="Password">
+            
+            <button class="btn" id="authBtn" onclick="handleAuth()">Login / Register</button>
+            <p style="text-align:center; font-size:13px; margin-top:15px; cursor:pointer; color:blue;" onclick="toggleAuthMode()" id="toggleAuthText">New user? Click to Register</p>
         </div>
     </div>
 
     <!-- Secret Admin Panel Modal -->
-    <div id="adminModal">
+    <div id="adminModal" class="modal">
         <div class="modal-content">
             <h3>🔐 Secret Admin Panel</h3>
-            <p>Kalu Radha Master Dashboard (75-5-20 Split)</p>
-            <input type="password" id="adminPass" placeholder="Enter Password (admin123)">
+            <p style="font-size:12px; color:#666;">Kalu Radha Master Dashboard (75-5-20 Split)</p>
+            <input type="password" id="adminPass" placeholder="Enter Admin Password (admin123)">
             <button class="btn" onclick="verifyAdmin()">Login Admin</button>
-            <div id="adminDashboardData" style="display:none; margin-top:15px; text-align:left; font-size:14px;">
-                <p><b>Total Users:</b> 1,540</p>
-                <p><b>Platform Revenue (20%):</b> ₹6,200</p>
-                <p><b>Pending Payout Requests:</b> 5 Requests</p>
+            
+            <div id="adminDashboardData" style="display:none; margin-top:15px; text-align:left; font-size:13px;">
+                <p><b>Total Registered Users:</b> <span id="admTotalUsers">1</span></p>
+                <p><b>Platform Net Profit (20%):</b> ₹4,500</p>
+                <p><b>Pending Payouts:</b> <span id="admPayouts">2 Requests</span></p>
                 <button class="btn" style="background:#ffa502;" onclick="alert('All Payouts Approved Successfully via Cashfree Payout API!')">Approve All Payouts</button>
             </div>
-            <button class="btn" style="background:#747d8c; margin-top:10px;" onclick="closeAdmin()">Close</button>
+            <button class="btn" style="background:#747d8c; margin-top:10px;" onclick="closeAdmin()">Close Panel</button>
         </div>
     </div>
 
     <script>
-        let coins = parseInt(localStorage.getItem('zing_coins')) || 150;
-        updateUI();
+        // App State Management
+        let isSignup = false;
+        let currentUser = JSON.parse(localStorage.getItem('zing_current_user')) || null;
+
+        // Check URL for Referral Code on load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            if(refCode && !currentUser) {
+                localStorage.setItem('zing_invited_by', refCode);
+            }
+            checkLoginState();
+        }
+
+        function checkLoginState() {
+            if(currentUser) {
+                document.getElementById('authModal').style.display = 'none';
+                document.getElementById('mainAppContent').style.display = 'block';
+                document.getElementById('welcomeUser').innerText = `Welcome, ${currentUser.name}!`;
+                
+                // Set Referral Link
+                let refLink = `${window.location.origin}${window.location.pathname}?ref=${currentUser.mobile}`;
+                document.getElementById('myRefLink').value = refLink;
+                
+                updateUI();
+            } else {
+                document.getElementById('authModal').style.display = 'flex';
+                document.getElementById('mainAppContent').style.display = 'none';
+            }
+        }
+
+        function toggleAuthMode() {
+            isSignup = !isSignup;
+            if(isSignup) {
+                document.getElementById('signupFields').style.display = 'block';
+                document.getElementById('authBtn').innerText = 'Register Account';
+                document.getElementById('toggleAuthText').innerText = 'Already have an account? Login here';
+            } else {
+                document.getElementById('signupFields').style.display = 'none';
+                document.getElementById('authBtn').innerText = 'Login Account';
+                document.getElementById('toggleAuthText').innerText = 'New user? Click to Register';
+            }
+        }
+
+        function handleAuth() {
+            let mobile = document.getElementById('regMobile').value.trim();
+            let pass = document.getElementById('regPass').value.trim();
+            let name = document.getElementById('regName').value.trim();
+
+            if(!mobile || !pass || (isSignup && !name)) {
+                alert('Please fill all required fields!');
+                return;
+            }
+
+            if(isSignup) {
+                // Register new user
+                let userData = {
+                    name: name,
+                    mobile: mobile,
+                    pass: pass,
+                    coins: 100, // Signup bonus
+                    refCount: 0,
+                    refEarnings: 0
+                };
+                localStorage.setItem('zing_user_' + mobile, JSON.stringify(userData));
+                
+                // Check if came via referral
+                let invitedBy = localStorage.getItem('zing_invited_by');
+                if(invitedBy && invitedBy !== mobile) {
+                    let inviterData = JSON.parse(localStorage.getItem('zing_user_' + invitedBy));
+                    if(inviterData) {
+                        inviterData.refCount += 1;
+                        inviterData.coins += 50; // Referral bonus
+                        inviterData.refEarnings += 50;
+                        localStorage.setItem('zing_user_' + invitedBy, JSON.stringify(inviterData));
+                    }
+                }
+
+                currentUser = userData;
+                localStorage.setItem('zing_current_user', JSON.stringify(currentUser));
+                alert('Registration Successful! +100 Coins Bonus added.');
+            } else {
+                // Login existing user
+                let storedUser = localStorage.getItem('zing_user_' + mobile);
+                if(storedUser) {
+                    let parsed = JSON.parse(storedUser);
+                    if(parsed.pass === pass) {
+                        currentUser = parsed;
+                        localStorage.setItem('zing_current_user', JSON.stringify(currentUser));
+                        alert('Login Successful!');
+                    } else {
+                        alert('Incorrect Password!');
+                        return;
+                    }
+                } else {
+                    // Auto create if not exists for smooth testing
+                    currentUser = { name: 'Anil User', mobile: mobile, pass: pass, coins: 150, refCount: 0, refEarnings: 0 };
+                    localStorage.setItem('zing_user_' + mobile, JSON.stringify(currentUser));
+                    localStorage.setItem('zing_current_user', JSON.stringify(currentUser));
+                    alert('Account auto-created & Logged in!');
+                }
+            }
+            checkLoginState();
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('zing_current_user');
+            currentUser = null;
+            checkLoginState();
+        }
 
         function updateUI() {
-            let rs = (coins / 10).toFixed(1);
-            document.getElementById('walletDisplay').innerText = `Coins: ${coins} (₹${rs})`;
-            localStorage.setItem('zing_coins', coins);
+            if(!currentUser) return;
+            let rs = (currentUser.coins / 10).toFixed(1);
+            document.getElementById('walletDisplay').innerText = `Coins: ${currentUser.coins} (₹${rs})`;
+            document.getElementById('refCount').innerText = `${currentUser.refCount} Users`;
+            document.getElementById('refEarnings').innerText = `${currentUser.refEarnings} Coins (₹${(currentUser.refEarnings/10).toFixed(1)})`;
+            
+            // Save back to storage
+            localStorage.setItem('zing_user_' + currentUser.mobile, JSON.stringify(currentUser));
+            localStorage.setItem('zing_current_user', JSON.stringify(currentUser));
         }
 
         function claimDailyBonus() {
-            coins += 50;
+            currentUser.coins += 50;
             updateUI();
-            alert('Success! 50 Coins added to your wallet.');
+            alert('Success! 50 Daily Bonus Coins added.');
         }
 
         function watchAdMobReward(taskName, reward) {
-            // AdMob Rewarded Ad Unit ID: ca-app-pub-1404551168419666/3377184323
-            alert(`Loading Google AdMob Rewarded Ad (ID: 3377184323)...`);
+            alert('Loading Google AdMob Rewarded Ad...');
             setTimeout(() => {
-                // Ad complete hone ke baad coins add honge aur AdMob dashboard par impression/earning count hogi
-                coins += reward;
+                currentUser.coins += reward;
                 updateUI();
-                alert(`${taskName} Ad completed! +${reward} Coins added to your wallet.`);
-            }, 1500);
+                alert(`${taskName} Task Completed! +${reward} Coins added.`);
+            }, 1200);
+        }
+
+        function shareOnWhatsApp() {
+            let link = document.getElementById('myRefLink').value;
+            let text = encodeURIComponent(`🔥 Zing Pro App par rozana 500₹ tak kamayein! Mera link use karke join karein aur turant bonus paayein: ${link}`);
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
         }
 
         function requestWithdrawal() {
@@ -207,13 +379,13 @@
                 alert('Please enter a valid UPI ID!');
                 return;
             }
-            if(coins < 500) {
+            if(currentUser.coins < 500) {
                 alert('Minimum 500 Coins required for withdrawal (₹50)!');
                 return;
             }
-            coins -= 500;
+            currentUser.coins -= 500;
             updateUI();
-            alert(`Withdrawal request of ₹50 sent successfully to UPI: ${upi}! Pending admin approval.`);
+            alert(`Withdrawal request of ₹50 sent successfully to UPI: ${upi}! Pending Admin Approval.`);
         }
 
         // Secret Admin Panel trigger on Logo 5 fast clicks
@@ -242,5 +414,4 @@
         }
     </script>
 </body>
-  </html>
-  
+</html>
