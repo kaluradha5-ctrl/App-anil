@@ -1,0 +1,9 @@
+{
+  "name": "Zing Pro Kalu Radha",
+  "short_name": "ZingPro",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f2f6",
+  "theme_color": "#ff4757",
+  "description": "Kalu Radha Earning Platform with AdMob and Referral System"
+}
